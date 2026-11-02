@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "source_commit": "4d09ba6d6a7e891dd8063974dfe81b3d78e3494f",
+  "provider": "anthropic",
+  "model": "claude-fable-5-1",
+  "effort": "high",
+  "max_tokens": 128000,
+  "order_seed": 20261102,
+  "repetitions": 1,
+  "price_date": "2026-11-02",
+  "usd_per_input_token": 1e-05,
+  "usd_per_output_token": 5e-05,
+  "conservative_cost_usd": 7.9948,
+  "protocol": "protocol-v1",
+  "cases": [
+    {
+      "id": "246a5b58-r0",
+      "kind": "shape",
+      "truth": "triangle",
+      "source": "upstream/lm_understand-logs/exp2_diffusion/runs/triangle/prompt.txt",
+      "prompt_sha256": "d8533653617af859a80f105b8a6360efbf7331be41f85f97212b75fcc63da897",
+      "reference_input_tokens": 99773,
+      "request_sha256": "26ddb88a4a88c10febc44d5152bf1709f885647fb26c5ba98accf99cebe325ee",
+      "input_token_allowance": 159481
+    }
+  ]
+}

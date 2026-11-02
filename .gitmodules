@@ -1,0 +1,3 @@
+[submodule "upstream/lm_understand-logs"]
+	path = upstream/lm_understand-logs
+	url = https://github.com/RikiyaT/lm_understand-logs.git

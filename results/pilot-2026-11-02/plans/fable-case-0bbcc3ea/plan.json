@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "source_commit": "4d09ba6d6a7e891dd8063974dfe81b3d78e3494f",
+  "provider": "anthropic",
+  "model": "claude-fable-5-1",
+  "effort": "high",
+  "max_tokens": 128000,
+  "order_seed": 20261102,
+  "repetitions": 1,
+  "price_date": "2026-11-02",
+  "usd_per_input_token": 1e-05,
+  "usd_per_output_token": 5e-05,
+  "conservative_cost_usd": 7.5628,
+  "protocol": "protocol-v1",
+  "cases": [
+    {
+      "id": "0bbcc3ea-r0",
+      "kind": "game",
+      "truth": "freeway",
+      "source": "upstream/lm_understand-logs/exp1_which_game/runs/freeway/prompt.txt",
+      "prompt_sha256": "76f30db2c4591e340f4a8e1ca56abdfdf6aa9857e3220936ca178f86c29e6070",
+      "reference_input_tokens": 73695,
+      "request_sha256": "d39da144c4d67329c3a9a8ce2ed023b00469d1abecabbad4f99bbd31104aeb0e",
+      "input_token_allowance": 116283
+    }
+  ]
+}

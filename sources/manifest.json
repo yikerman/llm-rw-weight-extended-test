@@ -1,0 +1,127 @@
+{
+  "fetched_at_utc": "2026-11-02T22:46:44.760637+00:00",
+  "sources": [
+    {
+      "path": "sources/weight-space-post.html",
+      "url": "https://rikiyat.github.io/blog/weight-space-programming/",
+      "sha256": "60e015f47e4c011297229519a93e36f845883303d80912f48328d8b00de33df9"
+    },
+    {
+      "path": "sources/weight-space-post.txt",
+      "url": null,
+      "sha256": "be578e19e6970322e0a5ab2c212ee4263bd52bc2caaec78186b5268e59e7b19b"
+    },
+    {
+      "path": "sources/weight-space-hn.html",
+      "url": "https://news.ycombinator.com/item?id=50342657",
+      "sha256": "945e27744a55855f9dadbcf1ac389442e604ce0af2e88bed2996fd9d8521cf17"
+    },
+    {
+      "path": "sources/weight-space-comment.json",
+      "url": "https://hacker-news.firebaseio.com/v0/item/50344963.json",
+      "sha256": "7723b7f4e8b409fecb5de64617dad96110a3a6ea6fdb53983bc34f7175d1fc10"
+    },
+    {
+      "path": "sources/anthropic-models.html",
+      "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
+      "sha256": "09f65af77964149f70470586df46b0981d2a26a9951898192487ed4101efa789"
+    },
+    {
+      "path": "sources/anthropic-models.txt",
+      "url": null,
+      "sha256": "bcf1e697cacdf6e65bc237f10e1578b5b7936ce6544113cf620c42650a124c8f"
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/RikiyaT/lm_understand-logs",
+    "path": "upstream/lm_understand-logs",
+    "commit": "4d09ba6d6a7e891dd8063974dfe81b3d78e3494f"
+  },
+  "pilot_prompts": [
+    {
+      "path": "upstream/lm_understand-logs/exp1_which_game/runs/breakout/prompt.txt",
+      "bytes": 115478,
+      "sha256": "ba1d97cfcb585f0ccab628ed1ef983b230d897b97ae6ff10f2de6eac6d390b31",
+      "astra_usage": {
+        "input_tokens": 73749,
+        "cached_input_tokens": 2432,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1679,
+        "reasoning_output_tokens": 833
+      }
+    },
+    {
+      "path": "upstream/lm_understand-logs/exp1_which_game/runs/freeway/prompt.txt",
+      "bytes": 115259,
+      "sha256": "76f30db2c4591e340f4a8e1ca56abdfdf6aa9857e3220936ca178f86c29e6070",
+      "astra_usage": {
+        "input_tokens": 73695,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1768,
+        "reasoning_output_tokens": 1034
+      }
+    },
+    {
+      "path": "upstream/lm_understand-logs/exp1_which_game/runs/pacman/prompt.txt",
+      "bytes": 115394,
+      "sha256": "1c75e66aab1e611bdb07a87d6f70e3d2ba3d149e58f259b5ad7a485661244acf",
+      "astra_usage": {
+        "input_tokens": 73723,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1838,
+        "reasoning_output_tokens": 1034
+      }
+    },
+    {
+      "path": "upstream/lm_understand-logs/exp1_which_game/runs/pong/prompt.txt",
+      "bytes": 115269,
+      "sha256": "1b143ac2f46ab7a0c4b3eb45bd2b9d82314c3b24e2d2412f80566946c935c5ba",
+      "astra_usage": {
+        "input_tokens": 73723,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1833,
+        "reasoning_output_tokens": 1031
+      }
+    },
+    {
+      "path": "upstream/lm_understand-logs/exp2_diffusion/runs/circle/prompt.txt",
+      "bytes": 157889,
+      "sha256": "f02e93fcdb15177695684005f4345a6f9fc94d9925ad6c0fe69545203676693b",
+      "astra_usage": {
+        "input_tokens": 99791,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2778,
+        "reasoning_output_tokens": 2272
+      }
+    },
+    {
+      "path": "upstream/lm_understand-logs/exp2_diffusion/runs/square/prompt.txt",
+      "bytes": 158187,
+      "sha256": "fbb9f8b4b1b63dd4460d7168159b135b1420e70e24bcddd00f986e191f417172",
+      "astra_usage": {
+        "input_tokens": 99789,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3149,
+        "reasoning_output_tokens": 2588
+      }
+    },
+    {
+      "path": "upstream/lm_understand-logs/exp2_diffusion/runs/triangle/prompt.txt",
+      "bytes": 158457,
+      "sha256": "d8533653617af859a80f105b8a6360efbf7331be41f85f97212b75fcc63da897",
+      "astra_usage": {
+        "input_tokens": 99773,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 1541,
+        "reasoning_output_tokens": 1034
+      }
+    }
+  ],
+  "model_calls_performed": 0
+}

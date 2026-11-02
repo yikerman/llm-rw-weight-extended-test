@@ -1,0 +1,5 @@
+{
+  "reason": "Invocation was placed inside a multi-command shell; unlike standalone approved uv invocation, network access was unavailable. Relaunched explicitly after inspection.",
+  "response_received": false,
+  "elapsed_launch_seconds": 0.118
+}

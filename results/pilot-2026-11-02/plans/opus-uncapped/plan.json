@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "source_commit": "4d09ba6d6a7e891dd8063974dfe81b3d78e3494f",
+  "provider": "anthropic",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "max_tokens": 128000,
+  "order_seed": 20261102,
+  "repetitions": 1,
+  "price_date": "2026-11-02",
+  "usd_per_input_token": 4e-06,
+  "usd_per_output_token": 2e-05,
+  "conservative_cost_usd": 3.026,
+  "protocol": "protocol-v1",
+  "cases": [
+    {
+      "id": "a9f535cc-r0",
+      "kind": "game",
+      "truth": "breakout",
+      "source": "upstream/lm_understand-logs/exp1_which_game/runs/breakout/prompt.txt",
+      "prompt_sha256": "ba1d97cfcb585f0ccab628ed1ef983b230d897b97ae6ff10f2de6eac6d390b31",
+      "reference_input_tokens": 73749,
+      "request_sha256": "88ff1d54938bf94df13dd5de5e118dbd9a68fa19b0cd51f7ba296791f4fb08b5",
+      "input_token_allowance": 116502
+    }
+  ]
+}
