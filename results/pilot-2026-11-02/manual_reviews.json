@@ -1,8 +1,0 @@
-{
-  "claude-fable-5-1/dfc6cb65-r0": {
-    "prediction": "pong",
-    "correct": true,
-    "reviewer": "assistant; not blinded to model or answer key",
-    "rationale": "Game section explicitly identifies Pong-style paddle game and single-player Pong. Breakout-without-bricks is a parenthetical analogy, not a competing game prediction; vertical paddle on left wall matches Pong."
-  }
-}

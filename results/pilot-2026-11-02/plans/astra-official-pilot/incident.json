@@ -1,5 +1,0 @@
-{
-  "classification": "infrastructure_failure",
-  "detail": "Transport rejected presence of nullable error field. Raw response not retained. Usage unknown. New campaign uses corrected transport.",
-  "possible_billed_requests": 1
-}

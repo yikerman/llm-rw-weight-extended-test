@@ -15,3 +15,8 @@ wheels/
 !.env.example
 runs/
 .uv-cache/
+
+# LaTeX build intermediates
+report/*.aux
+report/*.log
+report/*.out
