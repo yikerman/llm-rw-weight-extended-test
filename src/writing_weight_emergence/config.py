@@ -9,6 +9,7 @@ MODELS = {
     "gpt-6-astra": "openai",
     "claude-opus-5-5": "anthropic",
     "claude-fable-5-1": "anthropic",
+    "moonshotai/kimi-k3.1-pro": "openrouter",
 }
 CASES = {
     "pacman": 1,

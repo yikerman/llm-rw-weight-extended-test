@@ -1,4 +1,4 @@
-"""Official API transports; credentials never enter request artifacts."""
+"""API transports; credentials never enter request artifacts."""
 
 import json
 import os
@@ -41,7 +41,7 @@ def make_request(model, prompt):
 
 def call(provider, payload):
     load_env()
-    env = "ANTHROPIC_API_KEY" if provider == "anthropic" else "OPENAI_API_KEY"
+    env = f"{provider.upper()}_API_KEY"
     key = os.environ.get(env)
     if not key:
         raise ValueError(f"Missing {env}; set it in .env or the environment")
@@ -50,7 +50,11 @@ def call(provider, payload):
         url = "https://api.anthropic.com/v1/messages"
         headers.update({"x-api-key": key, "anthropic-version": "2026-10-21"})
     else:
-        url = "https://api.openai.com/v1/responses"
+        url = (
+            "https://openrouter.ai/api/v1/responses"
+            if provider == "openrouter"
+            else "https://api.openai.com/v1/responses"
+        )
         headers["Authorization"] = "Bearer " + key
     req = urllib.request.Request(url, json.dumps(payload).encode(), headers)
     try:

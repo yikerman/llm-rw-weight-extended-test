@@ -3,7 +3,7 @@
 Do other models share Astra's ability to infer a neural network's behavior from
 its weights? This project repeats experiments 1–2 from
 [Sparks of Weight-Space Programming](https://rikiyat.github.io/blog/weight-space-programming/)
-with GPT-6 Astra, Claude Opus 5.5, and Claude Fable 5.1.
+with GPT-6 Astra, Claude Opus 5.5, Claude Fable 5.1, and Kimi K3.1 Pro.
 
 See the [report](report/replication.pdf) ([LaTeX](report/replication.tex)).
 Prompts and latest completed transcripts are in `results/experiment-{number}-{case}/`.
@@ -16,12 +16,14 @@ uv sync
 git submodule update --init --recursive
 ```
 
-Set `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` in `.env` (see `.env.example`).
+Set `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, and `OPENROUTER_API_KEY` in `.env`
+(see `.env.example`). Kimi uses OpenRouter; the others use their official APIs.
 
 ```sh
 uv run writing-weight-emergence --model gpt-6-astra
 uv run writing-weight-emergence --model claude-opus-5-5
 uv run writing-weight-emergence --model claude-fable-5-1
+uv run writing-weight-emergence --model moonshotai/kimi-k3.1-pro
 ```
 
 These commands can run concurrently. Each writes completed transcripts directly

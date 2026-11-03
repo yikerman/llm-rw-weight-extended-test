@@ -4,7 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://github.com/yikerman/llm-rw-weight-extended-test/blob/master/"
-models = ["gpt-6-astra", "claude-opus-5-5", "claude-fable-5-1"]
+models = ["gpt-6-astra", "claude-opus-5-5", "claude-fable-5-1", "kimi-k3.1-pro"]
 cases = [
     ("pacman", "Pac-Man"),
     ("breakout", "Breakout"),
@@ -48,15 +48,17 @@ identification and three diffusion networks for shape identification. The source
 release was pinned at
 \href{https://github.com/RikiyaT/lm_understand-logs/tree/4d09ba6d6a7e891dd8063974dfe81b3d78e3494f}{commit 4d09ba6d}.
 
-The tested models were GPT-6 Astra, Claude Opus 5.5, and Claude Fable 5.1.
+The tested models were GPT-6 Astra, Claude Opus 5.5, Claude Fable 5.1,
+and Kimi K3.1 Pro.
 Their API identifiers and complete settings are preserved in the transcripts.
-They were accessed through the official OpenAI Responses and Anthropic Messages APIs. Each request contained the original user prompt,
+Astra and the Claude models used their official APIs; Kimi used OpenRouter's
+Responses API with model ID \path{moonshotai/kimi-k3.1-pro}. Each request contained the original user prompt,
 including all numerical weights, and the neutral system instruction
 ``Answer the user's request.'' Prompts were checked against the pinned upstream release. Each trial was a fresh request, with no tools, web access,
 code execution, demonstrations, or feedback. Ground-truth labels and previous
 answers were not included in the requests.
 
-Astra used high reasoning effort with detailed reasoning summaries. The Claude
+Astra and Kimi used high reasoning effort with detailed reasoning summaries requested. The Claude
 models used adaptive thinking with high effort. These settings do not establish
 equal inference compute. No temperature or generation seed was specified.
 
@@ -72,6 +74,7 @@ Model & Games & Shapes & Filled descriptions\\
 GPT-6 Astra & 4/4 & 3/3 & 0/3\\
 Claude Opus 5.5 & 4/4 & 3/3 & 2/3\\
 Claude Fable 5.1 & 4/4 & 3/3 & 1/3\\
+Kimi K3.1 Pro & 2/4 & 1/3 & 2/3\\
 \end{tabular}
 \end{center}
 
@@ -80,18 +83,28 @@ all seven released inputs for Astra and extend it to both Claude models.
 Game labels treat Freeway and Frogger as equivalent. Shape scoring accepts the
 published category aliases, including square/rectangle.
 
+Kimi correctly identified Pong, Freeway/Frogger, and circle. It called Breakout
+Frogger, Pac-Man Sokoban, square a circular blob, and triangle an uppercase A.
+The Sokoban and uppercase-A answers fall outside the scorer's known categories;
+the assistant adjudicated both as incorrect, without changing the answers or
+expanding the accepted aliases. Those reviews were not blinded and are recorded
+in the respective transcripts.
+
 Fable's Pong answer was manually adjudicated as correct: it explicitly identifies
 Pong-style, single-player Pong and describes the vertical paddle, but also calls
 it ``Breakout-without-bricks'' as an analogy. The automatic scorer flags both
 names. This assistant review was not blinded to the model or answer key; its
-rationale is retained in that transcript's assistant-authored evaluation metadata. All other final category
+rationale is retained in that transcript's assistant-authored evaluation metadata. Apart from these reviews and the two Kimi judgments above, final category
 results were scored automatically. Unicode hyphens were normalized for label
 matching.
 
 All three diffusion targets generate filled shapes. Astra describes all three
 as outlines. Opus describes the square and triangle as filled, but the circle
 as a ring. Fable describes the triangle as filled and the other two as outlines.
-The last table column measures only this attribute of the written description;
+Kimi describes the circle and square targets as filled, but labels the square
+as a circle; its triangle prediction is the letter A. Thus only its circle answer
+combines the correct category with a correct filled description.
+The last table column measures only the filled attribute, independently of category;
 it is not a complete image-fidelity score. Dimensions, variability, drawings,
 and individual numerical claims have not been independently scored.
 
@@ -99,7 +112,7 @@ and individual numerical claims have not been independently scored.
 The initial pilot had an assistant-imposed output limit of 16,384 tokens.
 Opus's Breakout response identified the correct game but was truncated during
 its description. At the user's direction, the smaller limit was removed.
-Subsequent OpenAI requests omitted \texttt{max\_output\_tokens}; Anthropic's
+Kimi requests had no requested output cap. Subsequent OpenAI requests omitted \texttt{max\_output\_tokens}; Anthropic's
 required \texttt{max\_tokens} was set to its documented maximum of 128,000.
 The truncated Opus trial was rerun and completed with the correct answer,
 using 18,161 output tokens including thinking. Earlier completed responses
@@ -112,7 +125,8 @@ The first Astra request was lost because the runner incorrectly treated an
 unknown; it is excluded from scoring and cannot be supplied as a transcript.
 Neither that failure nor an unsuccessful local network launch is treated as
 evidence about model capability. Failed, test, and superseded runs have been
-removed. There are 21 retained completed responses.
+removed. There are 28 retained completed responses. No incorrect Kimi answer was rerun
+to obtain a better result.
 
 \section*{Prompts and full transcripts}
 Each ``Prompt'' link contains the complete original user prompt, including all
@@ -123,8 +137,8 @@ omitted. Authentication headers are excluded. Reasoning that the provider did
 not expose as text cannot be included. Links assume publication of this repository's master branch
 at \href{https://github.com/yikerman/llm-rw-weight-extended-test}{the GitHub repository}.
 
-\begin{longtable}{lllll}
-Task & Input & Astra & Opus 5.5 & Fable 5.1\\
+\begin{longtable}{llllll}
+Task & Input & Astra & Opus & Fable & Kimi\\
 \hline
 \endhead
 """
@@ -144,6 +158,12 @@ Fable also identify all game and shape categories. This supports cross-model
 replicability of these demonstrations, not broad weight-space understanding.
 The repeated circle error illustrates the distinction between recognizing a
 category and accurately describing the complete network's output.
+Kimi's 3/7 category result shows that the same success does not extend uniformly
+to every model tested here. Its correct filled-circle description also shows
+that performance differences are not a simple ordering on every attribute.
+Similar aggregate benchmark performance is not sufficient to predict success
+on these particular weight-reading prompts. This small comparison cannot
+attribute the difference to targeted training or reinforcement learning.
 
 These results do not identify how any model acquired the ability. They cannot
 establish or rule out task-specific training, reinforcement learning,

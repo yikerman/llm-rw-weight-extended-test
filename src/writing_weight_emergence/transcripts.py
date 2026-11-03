@@ -80,7 +80,7 @@ def write_transcript(
         + "\n```\n\n</details>\n"
     )
     prompt_file.write_text(prompt)
-    path = directory / f"{request['model']}-transcript.md"
+    path = directory / f"{request['model'].split('/')[-1]}-transcript.md"
     path.write_text(text)
     return path
 

@@ -77,12 +77,12 @@ class RunnerTests(unittest.TestCase):
                         messages, [{"role": "user", "content": source.read_text()}]
                     )
                     self.assertNotIn("truth", payload)
-                    if provider == "openai":
+                    if provider in ("openai", "openrouter"):
                         self.assertNotIn("max_output_tokens", payload)
                     path = (
                         Path(tmp)
                         / f"experiment-{CASES[case]}-{case}"
-                        / f"{model}-transcript.md"
+                        / f"{model.split('/')[-1]}-transcript.md"
                     )
                     metadata, _ = read_transcript(path)
                     self.assertTrue(metadata["evaluation"]["correct"])
@@ -128,6 +128,22 @@ class RunnerTests(unittest.TestCase):
         self.assertTrue(score("Game: Pac‑Man", "game", "pacman")["correct"])
         for answer in ["Game: Pong or Breakout", "Reasoning: Pong", "Game: Not Pong"]:
             self.assertTrue(score(answer, "game", "pong")["needs_review"])
+
+    def test_openrouter_transport(self):
+        with (
+            patch.dict("os.environ", {"OPENROUTER_API_KEY": "test-only"}),
+            patch.object(providers.urllib.request, "urlopen") as transport,
+        ):
+            transport.return_value.__enter__.return_value = io.StringIO(
+                '{"status":"completed","output":[]}'
+            )
+            providers.call(
+                "openrouter",
+                providers.make_request("moonshotai/kimi-k3.1-pro", "prompt"),
+            )
+            request = transport.call_args.args[0]
+            self.assertEqual(request.full_url, "https://openrouter.ai/api/v1/responses")
+            self.assertEqual(request.get_header("Authorization"), "Bearer test-only")
 
     def test_openai_null_error_response_is_preserved(self):
         response = {"error": None, "status": "completed", "output": []}

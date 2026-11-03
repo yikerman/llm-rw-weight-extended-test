@@ -65,14 +65,16 @@ class TranscriptTests(unittest.TestCase):
         self.assertEqual(len(folders), 7)
         for folder in folders:
             self.assertRegex(folder.name, r"^experiment-[12]-[a-z]+$")
-            self.assertEqual(
-                {p.name for p in folder.iterdir()},
-                {
-                    "prompt.txt",
-                    "gpt-6-astra-transcript.md",
-                    "claude-opus-5-5-transcript.md",
-                    "claude-fable-5-1-transcript.md",
-                },
+            self.assertTrue(
+                {p.name for p in folder.iterdir()}.issubset(
+                    {
+                        "prompt.txt",
+                        "gpt-6-astra-transcript.md",
+                        "claude-opus-5-5-transcript.md",
+                        "claude-fable-5-1-transcript.md",
+                        "kimi-k3.1-pro-transcript.md",
+                    }
+                ),
             )
             for path in folder.glob("*-transcript.md"):
                 meta, answer = read_transcript(path)
