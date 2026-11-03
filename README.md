@@ -1,4 +1,4 @@
-# Is weight reading an Astra-specific capability?
+# Weight Reading On Other Models
 
 Do other models share Astra's ability to infer a neural network's behavior from
 its weights? This project repeats experiments 1–2 from
