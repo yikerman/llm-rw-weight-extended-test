@@ -70,6 +70,7 @@ class TranscriptTests(unittest.TestCase):
                     {
                         "prompt.txt",
                         "gpt-6-astra-transcript.md",
+                        "gpt-6.1-sol-transcript.md",
                         "claude-opus-5-5-transcript.md",
                         "claude-fable-5-1-transcript.md",
                         "kimi-k3.1-pro-transcript.md",

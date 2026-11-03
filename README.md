@@ -3,7 +3,7 @@
 Do other models share Astra's ability to infer a neural network's behavior from
 its weights? This project repeats experiments 1–2 from
 [Sparks of Weight-Space Programming](https://rikiyat.github.io/blog/weight-space-programming/)
-with GPT-6 Astra, Claude Opus 5.5, Claude Fable 5.1, Kimi K3.1 Pro, and
+with GPT-6 Astra, GPT-6.1 Sol, Claude Opus 5.5, Claude Fable 5.1, Kimi K3.1 Pro, and
 Gemini 4 Argon.
 
 See the [report](report/replication.pdf) ([LaTeX](report/replication.tex)).
@@ -22,6 +22,7 @@ Set `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, and `OPENROUTER_API_KEY` in `.env`
 
 ```sh
 uv run python scripts/experiment12/run.py --model gpt-6-astra
+uv run python scripts/experiment12/run.py --model gpt-6.1-sol
 uv run python scripts/experiment12/run.py --model claude-opus-5-5
 uv run python scripts/experiment12/run.py --model claude-fable-5-1
 uv run python scripts/experiment12/run.py --model moonshotai/kimi-k3.1-pro

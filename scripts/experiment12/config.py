@@ -7,6 +7,7 @@ UPSTREAM = ROOT / "upstream/lm_understand-logs"
 SYSTEM = "Answer the user's request.\n"
 MODELS = {
     "gpt-6-astra": "openai",
+    "gpt-6.1-sol": "openai",
     "claude-opus-5-5": "anthropic",
     "claude-fable-5-1": "anthropic",
     "moonshotai/kimi-k3.1-pro": "openrouter",
