@@ -5,7 +5,7 @@ import os
 import urllib.request
 import urllib.error
 
-from .config import MODELS, ROOT, SYSTEM
+from scripts.experiment12.config import MODELS, ROOT, SYSTEM
 
 
 def load_env():
@@ -28,7 +28,7 @@ def make_request(model, prompt):
             "output_config": {"effort": "high"},
             "max_tokens": 128000,
         }
-    return {
+    request = {
         "model": model,
         "instructions": SYSTEM,
         "input": messages,
@@ -37,6 +37,14 @@ def make_request(model, prompt):
         "store": False,
         "service_tier": "default",
     }
+    if model == "google/gemini-4-argon":
+        # Documented endpoint maximum; the provider may still impose a lower limit.
+        request["max_output_tokens"] = 943_718
+        request["provider"] = {
+            "only": ["google-vertex/global"],
+            "allow_fallbacks": False,
+        }
+    return request
 
 
 def call(provider, payload):

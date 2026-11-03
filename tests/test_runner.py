@@ -6,10 +6,10 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from writing_weight_emergence import cli, providers
-from writing_weight_emergence.config import CASES, EXPERIMENTS, MODELS, ROOT, UPSTREAM
-from writing_weight_emergence.scoring import score
-from writing_weight_emergence.transcripts import read_transcript
+from scripts.experiment12 import run as cli, providers
+from scripts.experiment12.config import CASES, EXPERIMENTS, MODELS, ROOT, UPSTREAM
+from scripts.experiment12.scoring import score
+from scripts.experiment12.transcripts import read_transcript
 
 
 class RunnerTests(unittest.TestCase):
@@ -77,7 +77,12 @@ class RunnerTests(unittest.TestCase):
                         messages, [{"role": "user", "content": source.read_text()}]
                     )
                     self.assertNotIn("truth", payload)
-                    if provider in ("openai", "openrouter"):
+                    if model == "google/gemini-4-argon":
+                        self.assertEqual(payload["max_output_tokens"], 943_718)
+                        self.assertEqual(
+                            payload["provider"]["only"], ["google-vertex/global"]
+                        )
+                    elif provider in ("openai", "openrouter"):
                         self.assertNotIn("max_output_tokens", payload)
                     path = (
                         Path(tmp)

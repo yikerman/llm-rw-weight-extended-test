@@ -2,11 +2,15 @@
 
 import argparse
 import time
+import sys
 from pathlib import Path
 
-from .config import CASES, EXPERIMENTS, MODELS, ROOT, UPSTREAM
-from .providers import call, extract, make_request
-from .transcripts import write_transcript
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from scripts.experiment12.config import CASES, EXPERIMENTS, MODELS, ROOT, UPSTREAM
+from scripts.experiment12.providers import call, extract, make_request
+from scripts.experiment12.transcripts import write_transcript
 
 
 def run(model, cases, results):
@@ -27,7 +31,11 @@ def run(model, cases, results):
         elapsed = time.monotonic() - start
         answer, complete = extract(provider, response)
         if not complete or not answer.strip():
-            print("  Incomplete response; previous result kept.", flush=True)
+            print(
+                f"  Incomplete response ({response.get('status')}, "
+                f"{response.get('incomplete_details') or response.get('error')}); previous result kept.",
+                flush=True,
+            )
             failed += 1
             continue
         path = write_transcript(
@@ -49,3 +57,7 @@ def main():
         parser.exit(1, f"{error}\n")
     if failed:
         parser.exit(1, f"{failed} case(s) did not complete.\n")
+
+
+if __name__ == "__main__":
+    main()

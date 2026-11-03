@@ -2,8 +2,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from writing_weight_emergence import cli
-from writing_weight_emergence.transcripts import read_transcript, write_transcript
+from scripts.experiment12 import run as cli
+from scripts.experiment12.transcripts import read_transcript, write_transcript
 
 
 class TranscriptTests(unittest.TestCase):
@@ -61,7 +61,7 @@ class TranscriptTests(unittest.TestCase):
                 write_transcript("anthropic", request, response, "pong", 3, root=root)
 
     def test_retained_results_layout(self):
-        folders = sorted((cli.ROOT / "results").iterdir())
+        folders = sorted((cli.ROOT / "results").glob("experiment-[12]-*"))
         self.assertEqual(len(folders), 7)
         for folder in folders:
             self.assertRegex(folder.name, r"^experiment-[12]-[a-z]+$")
@@ -73,6 +73,7 @@ class TranscriptTests(unittest.TestCase):
                         "claude-opus-5-5-transcript.md",
                         "claude-fable-5-1-transcript.md",
                         "kimi-k3.1-pro-transcript.md",
+                        "gemini-4-argon-transcript.md",
                     }
                 ),
             )

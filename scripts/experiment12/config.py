@@ -10,6 +10,7 @@ MODELS = {
     "claude-opus-5-5": "anthropic",
     "claude-fable-5-1": "anthropic",
     "moonshotai/kimi-k3.1-pro": "openrouter",
+    "google/gemini-4-argon": "openrouter",
 }
 CASES = {
     "pacman": 1,

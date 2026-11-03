@@ -3,9 +3,9 @@
 import json
 from pathlib import Path
 
-from .config import CASES, ROOT
-from .providers import extract
-from .scoring import score
+from scripts.experiment12.config import CASES, ROOT
+from scripts.experiment12.providers import extract
+from scripts.experiment12.scoring import score
 
 DETAILS = "\n\n<details>\n<summary>Run settings and assistant evaluation</summary>\n\n"
 

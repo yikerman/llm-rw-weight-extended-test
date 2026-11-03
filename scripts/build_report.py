@@ -1,10 +1,17 @@
 """Build the plain LaTeX report from the retained human-readable transcripts."""
 
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://github.com/yikerman/llm-rw-weight-extended-test/blob/master/"
-models = ["gpt-6-astra", "claude-opus-5-5", "claude-fable-5-1", "kimi-k3.1-pro"]
+models = [
+    "gpt-6-astra",
+    "claude-opus-5-5",
+    "claude-fable-5-1",
+    "kimi-k3.1-pro",
+    "gemini-4-argon",
+]
 cases = [
     ("pacman", "Pac-Man"),
     ("breakout", "Breakout"),
@@ -24,6 +31,38 @@ def directory(case):
 def link(path, label):
     assert (ROOT / path).exists(), path
     return r"\href{" + BASE + path + "}{" + label + "}"
+
+
+def gemini_result(case):
+    path = ROOT / directory(case) / "gemini-4-argon-transcript.md"
+    if not path.exists():
+        return None
+    details = path.read_text().rsplit(
+        "<summary>Run settings and assistant evaluation</summary>", 1
+    )[1]
+    metadata = json.loads(details.split("```json\n", 1)[1].split("\n```", 1)[0])
+    result = metadata["evaluation"]
+    if result.get("manual_review"):
+        result["correct"] = result["manual_review"]["correct"]
+    return result
+
+
+gemini = {case: gemini_result(case) for case, _ in cases}
+games = [gemini[c] for c in ("pacman", "breakout", "pong", "freeway") if gemini[c]]
+shapes = [gemini[c] for c in ("circle", "square", "triangle") if gemini[c]]
+missing = [case for case, result in gemini.items() if result is None]
+gemini_row = (
+    f"Gemini 4 Argon & {sum(r['correct'] is True for r in games)}/{len(games)} & "
+    f"{sum(r['correct'] is True for r in shapes)}/{len(shapes)} & "
+    f"{sum(r['fill_description'] == 'filled' for r in shapes)}/{len(shapes)}" + r"\\"
+)
+gemini_note = (
+    "Gemini denominators count completed responses only. Unscored cases: "
+    + ", ".join(missing)
+    + ". These incomplete requests are not counted as incorrect answers."
+    if missing
+    else "All seven Gemini requests have completed responses."
+)
 
 
 lines = [
@@ -49,22 +88,23 @@ release was pinned at
 \href{https://github.com/RikiyaT/lm_understand-logs/tree/4d09ba6d6a7e891dd8063974dfe81b3d78e3494f}{commit 4d09ba6d}.
 
 The tested models were GPT-6 Astra, Claude Opus 5.5, Claude Fable 5.1,
-and Kimi K3.1 Pro.
+Kimi K3.1 Pro, and Gemini 4 Argon.
 Their API identifiers and complete settings are preserved in the transcripts.
-Astra and the Claude models used their official APIs; Kimi used OpenRouter's
-Responses API with model ID \path{moonshotai/kimi-k3.1-pro}. Each request contained the original user prompt,
+Astra and the Claude models used their official APIs. Kimi and Gemini used
+OpenRouter's Responses API with model IDs \path{moonshotai/kimi-k3.1-pro}
+and \path{google/gemini-4-argon}. Each request contained the original user prompt,
 including all numerical weights, and the neutral system instruction
 ``Answer the user's request.'' Prompts were checked against the pinned upstream release. Each trial was a fresh request, with no tools, web access,
 code execution, demonstrations, or feedback. Ground-truth labels and previous
 answers were not included in the requests.
 
-Astra and Kimi used high reasoning effort with detailed reasoning summaries requested. The Claude
+Astra, Kimi, and Gemini used high reasoning effort with detailed reasoning summaries requested. The Claude
 models used adaptive thinking with high effort. These settings do not establish
 equal inference compute. No temperature or generation seed was specified.
 
 This is a replication of the released weight-reading tasks and category outcomes.
 The underlying networks were not retrained. Experiments 3--8, training procedures,
-and the authors' historical Codex CLI execution environment were not reproduced.
+and the authors' historical Codex CLI execution environment are outside this report's scope.
 
 \section*{Results}
 \begin{center}
@@ -75,8 +115,11 @@ GPT-6 Astra & 4/4 & 3/3 & 0/3\\
 Claude Opus 5.5 & 4/4 & 3/3 & 2/3\\
 Claude Fable 5.1 & 4/4 & 3/3 & 1/3\\
 Kimi K3.1 Pro & 2/4 & 1/3 & 2/3\\
+GEMINI_RESULT_ROW
 \end{tabular}
 \end{center}
+
+GEMINI_COMPLETION_NOTE
 
 The primary results reproduce the reported category-identification success on
 all seven released inputs for Astra and extend it to both Claude models.
@@ -104,6 +147,9 @@ as a ring. Fable describes the triangle as filled and the other two as outlines.
 Kimi describes the circle and square targets as filled, but labels the square
 as a circle; its triangle prediction is the letter A. Thus only its circle answer
 combines the correct category with a correct filled description.
+Gemini describes triangle as filled and square as hollow; its circle request
+is incomplete. All six completed Gemini category predictions are correct,
+but this is not a seven-case success because circle remains unscored.
 The last table column measures only the filled attribute, independently of category;
 it is not a complete image-fidelity score. Dimensions, variability, drawings,
 and individual numerical claims have not been independently scored.
@@ -125,8 +171,24 @@ The first Astra request was lost because the runner incorrectly treated an
 unknown; it is excluded from scoring and cannot be supplied as a transcript.
 Neither that failure nor an unsuccessful local network launch is treated as
 evidence about model capability. Failed, test, and superseded runs have been
-removed. There are 28 retained completed responses. No incorrect Kimi answer was rerun
+removed. There are RETAINED_COUNT retained completed responses. No incorrect Kimi answer was rerun
 to obtain a better result.
+
+Gemini's first five completed responses identified all four games and triangle
+correctly; the triangle was described as filled. Initial circle and square
+requests returned incomplete responses and were not retained. Their exact stop
+reasons are unavailable. Retrying with OpenRouter's documented 943,718-token
+maximum still produced an explicit max-output-token incomplete status. Final
+attempts selected the documented \path{google-vertex/global} endpoint with
+fallbacks disabled and the same maximum. The table and links include only
+completed responses; incomplete cases remain unscored. Square completed on
+that endpoint and was correctly identified as a hollow rectangle (correct category,
+incorrect fill). Circle still returned an incomplete max-output-token status:
+the response echoed a maximum of 943,718 but reported exactly 65,536 output
+tokens, including 65,533 reasoning tokens. Its category is unscored, not incorrect.
+The five completed initial cases were not rerun. Thus Gemini request settings were not uniform
+across cases. Endpoint limits were checked against
+\href{https://openrouter.ai/api/v1/models/google/gemini-4-argon/endpoints}{OpenRouter's endpoint metadata}.
 
 \section*{Prompts and full transcripts}
 Each ``Prompt'' link contains the complete original user prompt, including all
@@ -137,8 +199,8 @@ omitted. Authentication headers are excluded. Reasoning that the provider did
 not expose as text cannot be included. Links assume publication of this repository's master branch
 at \href{https://github.com/yikerman/llm-rw-weight-extended-test}{the GitHub repository}.
 
-\begin{longtable}{llllll}
-Task & Input & Astra & Opus & Fable & Kimi\\
+\begin{longtable}{lllllll}
+Task & Input & Astra & Opus & Fable & Kimi & Gemini\\
 \hline
 \endhead
 """
@@ -146,9 +208,8 @@ Task & Input & Astra & Opus & Fable & Kimi\\
 for truth, label in cases:
     cells = [label, link(directory(truth) + "/prompt.txt", "Prompt")]
     for model in models:
-        cells.append(
-            link(directory(truth) + "/" + model + "-transcript.md", "Transcript")
-        )
+        path = directory(truth) + "/" + model + "-transcript.md"
+        cells.append(link(path, "Read") if (ROOT / path).exists() else "Unscored")
     lines.append(" & ".join(cells) + r"\\" + "\n")
 lines.append(r"\end{longtable}" + "\n\n")
 lines.append(r"""
@@ -164,6 +225,9 @@ that performance differences are not a simple ordering on every attribute.
 Similar aggregate benchmark performance is not sufficient to predict success
 on these particular weight-reading prompts. This small comparison cannot
 attribute the difference to targeted training or reinforcement learning.
+Gemini extends successful category identification to another developer on its
+six completed cases. Its incomplete circle result prevents a complete seven-case
+comparison and is not evidence of inability to identify circles.
 
 These results do not identify how any model acquired the ability. They cannot
 establish or rule out task-specific training, reinforcement learning,
@@ -174,5 +238,11 @@ control was run. The study therefore provides limited evidence about
 out-of-distribution generalization or the original training-history hypothesis.
 \end{document}
 """)
-(ROOT / "report/replication.tex").write_text("".join(lines))
+document = (
+    "".join(lines)
+    .replace("GEMINI_RESULT_ROW", gemini_row)
+    .replace("GEMINI_COMPLETION_NOTE", gemini_note)
+)
+document = document.replace("RETAINED_COUNT", str(28 + len(games) + len(shapes)))
+(ROOT / "report/replication.tex").write_text(document)
 print("Wrote report/replication.tex; all linked files exist.")
